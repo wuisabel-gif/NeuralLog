@@ -1,0 +1,34 @@
+# OS and editor files
+.DS_Store
+.vs/
+.idea/
+*.suo
+*.user
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Node / Vite
+node_modules/
+dist/
+*.tsbuildinfo
+
+# .NET build results
+bin/
+obj/
+TestResults/
+
+# Local runtime data and exports
+neurallog-embeddings.sqlite3
+neurallog.index.json
+exports/
+screenshots/
+
+# Local tool metadata
+.sixth/

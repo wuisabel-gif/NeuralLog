@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neurallog"
+version = "0.1.0"
+description = "NeuralLog MVP: engineering memory system for Discord exports"
+readme = "Readme.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115,<1.0",
+  "numpy>=1.26,<3.0",
+  "uvicorn>=0.30,<1.0",
+]
+
+[project.optional-dependencies]
+faiss = [
+  "faiss-cpu>=1.8.0",
+]
+embeddings = [
+  "openai>=1.30.0",
+  "sentence-transformers>=3.0.0",
+]
+
+[project.scripts]
+neurallog = "neurallog.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["neurallog*"]

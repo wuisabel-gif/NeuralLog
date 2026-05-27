@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NeuralLog</title>
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Engineering Memory System</p>
+          <h1>NeuralLog</h1>
+          <p class="hero-text">
+            Search Discord exports, reconstruct timelines, evaluate embedding
+            backends, and explore engineering history from one interface.
+          </p>
+        </div>
+        <div class="hero-status">
+          <div class="status-card">
+            <span class="status-label">Service</span>
+            <strong id="health-status">Loading</strong>
+          </div>
+          <div class="status-card">
+            <span class="status-label">Index Size</span>
+            <strong id="health-index">0</strong>
+          </div>
+          <div class="status-card">
+            <span class="status-label">Backend</span>
+            <strong id="health-backend">unknown</strong>
+          </div>
+        </div>
+      </header>
+
+      <section class="panel panel-guide">
+        <div class="panel-head">
+          <h2>Getting Started</h2>
+          <p>
+            NeuralLog can either analyze an existing Discord export file or create one here with a
+            token and channel ID.
+          </p>
+        </div>
+
+        <div class="guide-grid">
+          <article class="guide-card">
+            <div class="section-title">Step 1</div>
+            <h3>Export your Discord history</h3>
+            <p>
+              You can either export with DiscordChatExporter yourself, or use the workflow controls
+              below to export a single channel directly into a JSON file for NeuralLog.
+            </p>
+          </article>
+
+          <article class="guide-card">
+            <div class="section-title">Step 2</div>
+            <h3>Understand the token step</h3>
+            <p>
+              If you export with a bot, the bot token is only used during export. If you export with
+              a personal user token, that also happens outside NeuralLog and may violate Discord's
+              Terms of Service. Prefer a bot token when possible.
+            </p>
+          </article>
+
+          <article class="guide-card">
+            <div class="section-title">Step 3</div>
+            <h3>Load the export here</h3>
+            <p>
+              After you have a JSON export, NeuralLog can search it, build timelines, evaluate
+              retrieval quality, and compare embedding backends from this interface.
+            </p>
+          </article>
+        </div>
+
+        <details class="guide-details">
+          <summary>How to get the export and token</summary>
+          <div class="guide-notes">
+            <p>
+              <strong>Bot token:</strong> open the Discord Developer Portal, choose your
+              application, go to the <strong>Bot</strong> section, and copy the token there.
+            </p>
+            <p>
+              <strong>User token:</strong> some people retrieve it from Discord web request headers,
+              but that is riskier and can violate Discord policy. If you choose to use a user token
+              here, do so carefully and only if you understand that risk.
+            </p>
+            <p>
+              <strong>Channel ID:</strong> enable Developer Mode in Discord, then right-click the
+              channel and choose <strong>Copy Channel ID</strong> if your exporter needs it.
+            </p>
+          </div>
+        </details>
+
+        <div class="sample-banner">
+          <strong>Just want to try it first?</strong>
+          Use the sample export and sample evaluation paths already filled into the form, then click
+          <strong>Search Export</strong>, <strong>Timeline</strong>, or <strong>Evaluate</strong>.
+        </div>
+      </section>
+
+      <main class="dashboard">
+        <section class="panel panel-controls">
+          <div class="panel-head">
+            <h2>Workflow Controls</h2>
+            <p>Point NeuralLog at an export, choose a retrieval stack, and run a task.</p>
+          </div>
+
+          <div class="control-grid">
+            <label>
+              <span>Token Type</span>
+              <select id="token-kind">
+                <option value="bot">bot token</option>
+                <option value="user">user token</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Discord Token</span>
+              <input id="discord-token" type="password" placeholder="Paste bot or user token" />
+            </label>
+
+            <label>
+              <span>Channel ID</span>
+              <input id="channel-id" type="text" placeholder="123456789012345678" />
+            </label>
+
+            <label>
+              <span>Export Output Path</span>
+              <input id="output-path" type="text" value="exports/channel-export.json" />
+            </label>
+
+            <label>
+              <span>Discord Export Path</span>
+              <input id="export-path" type="text" value="examples/sample-discord-export.json" />
+            </label>
+
+            <label>
+              <span>Evaluation Set Path</span>
+              <input id="evaluation-path" type="text" value="examples/sample-evaluation.json" />
+            </label>
+
+            <label>
+              <span>Query</span>
+              <textarea id="query-input" rows="3">Why was localization unstable in March?</textarea>
+            </label>
+
+            <label>
+              <span>Limit</span>
+              <input id="limit-input" type="number" min="1" max="25" value="5" />
+            </label>
+
+            <label>
+              <span>Vector Backend</span>
+              <select id="vector-backend">
+                <option value="auto">auto</option>
+                <option value="inmemory">inmemory</option>
+                <option value="faiss">faiss</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Embedding Backend</span>
+              <select id="embedding-backend">
+                <option value="hash">hash</option>
+                <option value="sentence-transformers">sentence-transformers</option>
+                <option value="openai">openai</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Embedding Model</span>
+              <input id="embedding-model" type="text" value="all-MiniLM-L6-v2" />
+            </label>
+
+            <label>
+              <span>Batch Size</span>
+              <input id="batch-size" type="number" min="1" value="32" />
+            </label>
+
+            <label>
+              <span>Cache Path</span>
+              <input id="cache-path" type="text" value="neurallog-embeddings.sqlite3" />
+            </label>
+
+            <label>
+              <span>Compare Specs</span>
+              <input
+                id="compare-specs"
+                type="text"
+                value="hash, sentence-transformers:all-MiniLM-L6-v2, openai:text-embedding-3-small"
+              />
+            </label>
+          </div>
+
+          <div class="button-row">
+            <button data-action="export-discord">Export from Discord</button>
+            <button data-action="ingest">Ingest</button>
+            <button data-action="search-export">Search Export</button>
+            <button data-action="timeline-export">Timeline</button>
+            <button data-action="evaluate">Evaluate</button>
+            <button data-action="compare-backends">Compare Backends</button>
+          </div>
+        </section>
+
+        <section class="panel panel-output">
+          <div class="panel-head">
+            <h2>Results</h2>
+            <p>Readable summaries first, raw structured data only when you need it.</p>
+          </div>
+          <div id="output-panel" class="output-panel">
+            <div class="empty-state">
+              <h3>Ready to explore</h3>
+              <p>
+                Run a search, timeline, evaluation, or backend comparison to turn engineering
+                history into something easier to read.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+  </html>

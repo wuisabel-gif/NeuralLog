@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NeuralLog</title>
+    <script>
+      if (window.location.protocol === "file:" || window.location.port === "5173") {
+        window.NEURALLOG_API_BASE = "http://127.0.0.1:8000";
+      } else {
+        window.NEURALLOG_API_BASE = window.location.origin;
+      }
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  </html>

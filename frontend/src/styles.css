@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #ecf4f1;
+  background: #081211;
+  font-family: "Ubuntu Mono", "IBM Plex Mono", monospace;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background-image: theme("backgroundImage.neurallog-grid");
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input,
+textarea,
+select {
+  color: #081211 !important;
+  background: rgba(245, 251, 249, 0.96) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(8, 18, 17, 0.55) !important;
+}

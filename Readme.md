@@ -4,14 +4,14 @@
 
 **Keywords:** `Engineering Memory` · `Discord Export Analysis` · `Semantic Search` · `Hybrid Retrieval` · `Timeline Reconstruction` · `Retrieval Evaluation` · `FastAPI`
 
-NeuralLog is a local-first research prototype for transforming Discord-based engineering discussions into a searchable operational memory system. The project is oriented toward robotics and embedded-systems workflows, where design rationale, debugging observations, experiment notes, and integration decisions are often distributed across long-lived chat channels rather than formal documentation.
+NeuralLog is a local-first research system for transforming Discord-based engineering discussions into a searchable operational memory layer. The project is oriented toward robotics and embedded-systems workflows, where design rationale, debugging observations, experiment notes, and integration decisions are often distributed across long-lived chat channels rather than formal documentation.
 
 This repository combines two layers:
 
-- `neurallog/`: the Python retrieval prototype, including ingestion, indexing, search, evaluation, timeline reconstruction, and a local web interface
+- `neurallog/`: the Python retrieval application, including ingestion, indexing, search, evaluation, timeline reconstruction, and a local web interface
 - `DiscordChatExporter.*`: the upstream Discord export tooling retained as the ingestion substrate for producing compatible JSON exports
 
-The present implementation should be understood as an applied retrieval systems prototype rather than a production knowledge platform. Its purpose is to support exploration of how engineering chat archives can be indexed, queried, evaluated, and iteratively improved using lightweight local infrastructure.
+The present implementation should be understood as an applied retrieval system rather than a production knowledge platform. Its purpose is to support exploration of how engineering chat archives can be indexed, queried, evaluated, and iteratively improved using lightweight local infrastructure.
 
 ## Abstract
 
@@ -372,7 +372,7 @@ This repository incorporates the upstream DiscordChatExporter codebase as an ing
 
 - `https://github.com/Tyrrrz/DiscordChatExporter`
 
-NeuralLog should therefore be interpreted as a downstream research prototype built on top of that export substrate, rather than as an unrelated implementation from first principles.
+NeuralLog should therefore be interpreted as a downstream research system built on top of that export substrate, rather than as an unrelated implementation from first principles.
 
 ## License
 
