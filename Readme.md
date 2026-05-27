@@ -1,6 +1,8 @@
 # NeuralLog
 
-**Keywords:** engineering memory, information retrieval, semantic search, hybrid retrieval, Discord export analysis, timeline reconstruction, robotics communication, embedded systems, retrieval evaluation, engineering knowledge management
+![NeuralLog interface overview](.assets/output.png)
+
+**Keywords:** `Engineering Memory` · `Discord Export Analysis` · `Semantic Search` · `Hybrid Retrieval` · `Timeline Reconstruction` · `Retrieval Evaluation` · `FastAPI`
 
 NeuralLog is a local-first research prototype for transforming Discord-based engineering discussions into a searchable operational memory system. The project is oriented toward robotics and embedded-systems workflows, where design rationale, debugging observations, experiment notes, and integration decisions are often distributed across long-lived chat channels rather than formal documentation.
 
