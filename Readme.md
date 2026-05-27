@@ -1,6 +1,6 @@
 # NeuralLog
 
-![NeuralLog interface overview](.assets/output.png)
+![NeuralLog interface overview](examples/neurallog%20screenshot.jpg)
 
 **Keywords:** `Engineering Memory` · `Discord Export Analysis` · `Semantic Search` · `Hybrid Retrieval` · `Timeline Reconstruction` · `Retrieval Evaluation` · `FastAPI`
 
