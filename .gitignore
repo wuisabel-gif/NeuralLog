@@ -29,6 +29,3 @@ neurallog-embeddings.sqlite3
 neurallog.index.json
 exports/
 screenshots/
-
-# Local tool metadata
-.sixth/
