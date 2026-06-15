@@ -5,9 +5,10 @@ type Props = {
   content: React.ReactNode;
   error?: string | null;
   loading?: boolean;
+  demo?: boolean;
 };
 
-export default function ResultPanel({ content, error, loading }: Props) {
+export default function ResultPanel({ content, error, loading, demo }: Props) {
   if (loading) {
     return (
       <div className="rounded-3xl border border-white/10 bg-neurallog-panel/90 p-6 shadow-panel">
@@ -35,8 +36,11 @@ export default function ResultPanel({ content, error, loading }: Props) {
           <h2 className="font-display text-2xl text-white">Results</h2>
           <p className="mt-1 text-sm text-neurallog-fog">Readable summaries first, raw data only when you need it.</p>
         </div>
-        <Badge color="success" className="border border-neurallog-mint/30 bg-neurallog-mint/10 text-neurallog-mint">
-          Live API
+        <Badge
+          color={demo ? "warning" : "success"}
+          className="border border-neurallog-mint/30 bg-neurallog-mint/10 text-neurallog-mint"
+        >
+          {demo ? "Demo · local" : "Live API"}
         </Badge>
       </div>
       {content}

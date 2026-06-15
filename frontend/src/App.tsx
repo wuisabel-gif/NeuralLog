@@ -1,6 +1,7 @@
-import { Badge, Card } from "flowbite-react";
-import { Bot, Database, FileJson, ShieldAlert } from "lucide-react";
+import { Badge, Button, Card } from "flowbite-react";
+import { FileJson, Github, ShieldAlert, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
+import DiscordLogo from "./components/DiscordLogo";
 import InfoCard from "./components/InfoCard";
 import MetricTile from "./components/MetricTile";
 import ResultPanel from "./components/ResultPanel";
@@ -96,9 +97,58 @@ export default function App() {
     }
   }
 
+  const demo = health.status === "demo";
+
   return (
     <div className="min-h-screen px-4 py-6 text-white md:px-6">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-5">
+        <header className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-white/10 bg-neurallog-panel/80 px-5 py-4 shadow-panel">
+          <div className="flex items-center gap-3">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#5865F2] text-white shadow-panel">
+              <DiscordLogo className="h-6 w-6" />
+            </span>
+            <div className="leading-tight">
+              <div className="font-display text-lg font-semibold tracking-tight text-white">NeuralLog</div>
+              <div className="text-xs uppercase tracking-[0.24em] text-neurallog-fog">Discord Memory Search</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge
+              color={demo ? "warning" : "success"}
+              className="border border-neurallog-mint/30 bg-neurallog-mint/10 text-neurallog-mint"
+            >
+              {demo ? "Live demo · in-browser" : `Connected · ${health.status}`}
+            </Badge>
+            <a
+              href="https://github.com/wuisabel-gif/NeuralLog"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-neurallog-fog transition hover:border-neurallog-mint/40 hover:text-white"
+            >
+              <Github className="h-4 w-4" />
+              Source
+            </a>
+          </div>
+        </header>
+
+        {demo && (
+          <Card className="border border-neurallog-mint/30 bg-neurallog-mint/5 shadow-panel">
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-neurallog-mint/30 bg-neurallog-mint/10">
+                <Sparkles className="h-5 w-5 text-neurallog-mint" />
+              </span>
+              <div className="text-sm leading-6 text-neurallog-fog">
+                <span className="font-semibold text-white">You're in the live demo.</span>{" "}
+                Everything runs in your browser against a bundled sample Discord export — no token,
+                install, or server required. Try <span className="text-neurallog-mint">Search Export</span>,{" "}
+                <span className="text-neurallog-mint">Timeline</span>, <span className="text-neurallog-mint">Evaluate</span>,
+                or <span className="text-neurallog-mint">Compare Backends</span>. To analyze your own server,
+                run NeuralLog locally.
+              </div>
+            </div>
+          </Card>
+        )}
+
         <section className="grid gap-5 xl:grid-cols-[1.45fr_0.95fr]">
           <Card className="border border-white/10 bg-neurallog-panel/90 shadow-panel">
             <div className="mb-3 text-xs uppercase tracking-[0.28em] text-neurallog-mint">Engineering Memory System</div>
@@ -230,12 +280,28 @@ export default function App() {
             }
           />
 
-          <ResultPanel loading={loading} error={error} content={renderView(view)} />
+          <ResultPanel loading={loading} error={error} demo={demo} content={renderView(view)} />
         </section>
+
+        <footer className="mt-2 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-neurallog-fog">
+          <div className="flex items-center gap-2">
+            <DiscordLogo className="h-4 w-4 text-[#5865F2]" />
+            <span>NeuralLog · Engineering memory for Discord exports</span>
+          </div>
+          <Button
+            color="gray"
+            size="sm"
+            className="cursor-default border border-white/10 bg-white/5 text-neurallog-fog hover:bg-white/10"
+          >
+            © {COPYRIGHT_YEAR} NeuralLog · All rights reserved
+          </Button>
+        </footer>
       </div>
     </div>
   );
 }
+
+const COPYRIGHT_YEAR = new Date().getFullYear();
 
 function renderView(view: ViewState) {
   if (view.kind === "empty") {
