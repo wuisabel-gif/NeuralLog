@@ -289,11 +289,15 @@ export default function App() {
             <span>NeuralLog · Engineering memory for Discord exports</span>
           </div>
           <Button
+            as="a"
+            href="https://github.com/wuisabel-gif"
+            target="_blank"
+            rel="noreferrer"
             color="gray"
             size="sm"
-            className="cursor-default border border-white/10 bg-white/5 text-neurallog-fog hover:bg-white/10"
+            className="border border-white/10 bg-white/5 text-neurallog-fog hover:bg-white/10 hover:text-white"
           >
-            © {COPYRIGHT_YEAR} NeuralLog · All rights reserved
+            <Github className="mr-2 h-4 w-4" />© {COPYRIGHT_YEAR} wuisabel-gif · All rights reserved
           </Button>
         </footer>
       </div>
