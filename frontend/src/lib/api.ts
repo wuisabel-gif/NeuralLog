@@ -1,4 +1,13 @@
 import type { ServiceConfig } from "../types";
+import {
+  demoCompare,
+  demoEvaluate,
+  demoExportMessage,
+  demoHealth,
+  demoIngest,
+  demoSearch,
+  demoTimeline,
+} from "./demo";
 
 function resolveApiBase() {
   const override = (window as typeof window & { NEURALLOG_API_BASE?: string }).NEURALLOG_API_BASE?.trim();
@@ -19,8 +28,31 @@ function resolveApiBase() {
 
 const API_BASE = resolveApiBase();
 
+// When the NeuralLog API can't be reached (for example on a static GitHub Pages
+// deployment) the app transparently switches to the in-browser demo engine so
+// every workflow still works against the bundled sample dataset.
+let demoMode = false;
+
+export function isDemoMode(): boolean {
+  return demoMode;
+}
+
+function enableDemoMode() {
+  demoMode = true;
+}
+
+async function fetchWithTimeout(input: string, init?: RequestInit, timeoutMs = 3000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(input, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function post<T>(path: string, body: unknown): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetchWithTimeout(`${API_BASE}${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -47,11 +79,16 @@ export async function fetchHealth(): Promise<{
   backend: string;
   embedding_backend: string;
 }> {
-  const response = await fetch(`${API_BASE}/health`);
-  if (!response.ok) {
-    throw new Error("Unable to reach NeuralLog API");
+  try {
+    const response = await fetchWithTimeout(`${API_BASE}/health`);
+    if (!response.ok) {
+      throw new Error("Unable to reach NeuralLog API");
+    }
+    return await response.json();
+  } catch {
+    enableDemoMode();
+    return demoHealth();
   }
-  return response.json();
 }
 
 export async function exportDiscord(input: {
@@ -67,17 +104,30 @@ export async function exportDiscord(input: {
   output_path: string;
   stdout?: string;
 }> {
-  return post("/workflow/export-discord", input);
+  try {
+    return await post("/workflow/export-discord", input);
+  } catch (error) {
+    if (demoMode) {
+      throw new Error(
+        "Exporting from Discord needs the NeuralLog API running locally. The live demo already includes a sample export you can search, time-line, and evaluate right away.",
+      );
+    }
+    throw error;
+  }
 }
 
 export async function ingestExport(input: { export_path: string; config: ServiceConfig }) {
-  return post<{
-    messages_indexed: number;
-    chunks_created: number;
-    index_size: number;
-    backend: string;
-    embedding_backend: string;
-  }>("/ingest/discord-export", input);
+  return withFallback(
+    () =>
+      post<{
+        messages_indexed: number;
+        chunks_created: number;
+        index_size: number;
+        backend: string;
+        embedding_backend: string;
+      }>("/ingest/discord-export", input),
+    () => demoIngest(),
+  );
 }
 
 export async function searchExport(input: {
@@ -86,7 +136,10 @@ export async function searchExport(input: {
   limit: number;
   config: ServiceConfig;
 }): Promise<{ results: import("../types").SearchResult[] }> {
-  return post("/workflow/search-export", input);
+  return withFallback(
+    () => post("/workflow/search-export", input),
+    () => demoSearch(input.query, input.limit),
+  );
 }
 
 export async function timelineExport(input: {
@@ -95,7 +148,10 @@ export async function timelineExport(input: {
   limit: number;
   config: ServiceConfig;
 }): Promise<{ events: import("../types").TimelineEvent[] }> {
-  return post("/workflow/timeline-export", input);
+  return withFallback(
+    () => post("/workflow/timeline-export", input),
+    () => demoTimeline(input.query, input.limit),
+  );
 }
 
 export async function evaluateExport(input: {
@@ -107,7 +163,10 @@ export async function evaluateExport(input: {
   summary: import("../types").EvaluationSummary;
   per_query: Array<Record<string, unknown>>;
 }> {
-  return post("/workflow/evaluate", input);
+  return withFallback(
+    () => post("/workflow/evaluate", input),
+    () => demoEvaluate(input.limit),
+  );
 }
 
 export async function compareBackends(input: {
@@ -121,5 +180,24 @@ export async function compareBackends(input: {
   comparisons: import("../types").ComparisonSummary[];
   failures: { label: string; error: string }[];
 }> {
-  return post("/workflow/compare-backends", input);
+  return withFallback(
+    () => post("/workflow/compare-backends", input),
+    () => demoCompare(input.specs, input.limit),
+  );
 }
+
+// Try the live API first; if it's unreachable, mark demo mode and use the
+// in-browser engine instead. If the demo also fails, surface that error.
+async function withFallback<T>(live: () => Promise<T>, demo: () => Promise<T>): Promise<T> {
+  if (demoMode) {
+    return demo();
+  }
+  try {
+    return await live();
+  } catch {
+    enableDemoMode();
+    return demo();
+  }
+}
+
+export { demoExportMessage };

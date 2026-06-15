@@ -1,0 +1,16 @@
+{
+  "queries": [
+    {
+      "query": "Why was localization unstable in March?",
+      "relevant_message_ids": ["1001", "1003"]
+    },
+    {
+      "query": "What did we do with mapping?",
+      "relevant_message_ids": ["1005", "1006"]
+    },
+    {
+      "query": "What changed after the pool test?",
+      "relevant_message_ids": ["1001", "1002", "1004"]
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "guild": {
+    "id": "guild-1",
+    "name": "USC Systems Lab"
+  },
+  "channel": {
+    "id": "channel-eng",
+    "name": "systems-integration"
+  },
+  "messages": [
+    {
+      "id": "1001",
+      "timestamp": "2026-03-10T17:22:00+00:00",
+      "content": "IMU drift got much worse after the pool test. EKF position estimate diverges after 90 seconds.",
+      "author": {
+        "id": "u1",
+        "name": "Maya"
+      }
+    },
+    {
+      "id": "1002",
+      "timestamp": "2026-03-12T19:15:00+00:00",
+      "content": "We changed the MPU-9250 low-pass filter constants and reduced some of the high-frequency noise.",
+      "author": {
+        "id": "u2",
+        "name": "Alex"
+      }
+    },
+    {
+      "id": "1003",
+      "timestamp": "2026-03-14T20:41:00+00:00",
+      "content": "Finished tuning EKF covariance values. Localization is still shaky during turns but much better.",
+      "author": {
+        "id": "u1",
+        "name": "Maya"
+      }
+    },
+    {
+      "id": "1004",
+      "timestamp": "2026-03-17T21:05:00+00:00",
+      "content": "After the covariance tuning and filter changes, localization stayed stable for the full test run.",
+      "author": {
+        "id": "u3",
+        "name": "Jordan"
+      }
+    },
+    {
+      "id": "1005",
+      "timestamp": "2026-03-19T18:10:00+00:00",
+      "content": "For mapping we switched from the old occupancy grid pipeline to a SLAM Toolbox configuration with loop closure enabled.",
+      "author": {
+        "id": "u4",
+        "name": "Rina"
+      }
+    },
+    {
+      "id": "1006",
+      "timestamp": "2026-03-20T18:42:00+00:00",
+      "content": "The mapping run improved after we cleaned the lidar timestamps and reduced duplicate scans in the bag replay.",
+      "author": {
+        "id": "u2",
+        "name": "Alex"
+      }
+    },
+    {
+      "id": "1007",
+      "timestamp": "2026-03-22T16:08:00+00:00",
+      "content": "Deployment note: we pinned the container image and fixed the environment file so the Jetson deploy stopped missing ROS dependencies.",
+      "author": {
+        "id": "u5",
+        "name": "Chris"
+      }
+    },
+    {
+      "id": "1008",
+      "timestamp": "2026-03-25T22:14:00+00:00",
+      "content": "Documentation task: summarize the sensor calibration checklist and put the final values into the shared experiment notes.",
+      "author": {
+        "id": "u3",
+        "name": "Jordan"
+      }
+    }
+  ]
+}
