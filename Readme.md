@@ -4,6 +4,8 @@
 
 **Keywords:** `Engineering Memory` · `Discord Export Analysis` · `Semantic Search` · `Hybrid Retrieval` · `Timeline Reconstruction` · `Retrieval Evaluation` · `FastAPI`
 
+**[▶ Try the live demo](https://wuisabel-gif.github.io/NeuralLog/)** — runs entirely in your browser against a bundled sample export. No token, install, or server required. Search it, reconstruct a timeline, evaluate retrieval quality, and compare embedding backends right from the page.
+
 NeuralLog is a local-first research system for transforming Discord-based engineering discussions into a searchable operational memory layer. The project is oriented toward robotics and embedded-systems workflows, where design rationale, debugging observations, experiment notes, and integration decisions are often distributed across long-lived chat channels rather than formal documentation.
 
 This repository combines two layers:
