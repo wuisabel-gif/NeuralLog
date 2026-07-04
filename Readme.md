@@ -2,30 +2,30 @@
 
 ![NeuralLog interface overview](examples/neurallog%20screenshot.jpg)
 
-**Keywords:** `Engineering Memory` · `Discord Export Analysis` · `Semantic Search` · `Hybrid Retrieval` · `Timeline Reconstruction` · `Retrieval Evaluation` · `FastAPI`
+**Keywords:** `Conversational Memory` · `Discord Export Analysis` · `Semantic Search` · `Hybrid Retrieval` · `Timeline Reconstruction` · `Retrieval Evaluation` · `FastAPI`
 
 **[▶ Try the live demo](https://wuisabel-gif.github.io/NeuralLog/)** — runs entirely in your browser against a bundled sample export. No token, install, or server required. Search it, reconstruct a timeline, evaluate retrieval quality, and compare embedding backends right from the page.
 
-NeuralLog is a local-first research system for transforming Discord-based engineering discussions into a searchable operational memory layer. The project is oriented toward robotics and embedded-systems workflows, where design rationale, debugging observations, experiment notes, and integration decisions are often distributed across long-lived chat channels rather than formal documentation.
+NeuralLog is a local-first research system for transforming Discord conversations into a searchable operational memory layer. It applies to any community that thinks out loud in chat — engineering teams, study groups, research labs, hobby servers, support channels, open-source projects — where decisions, rationale, answers, and context are distributed across long-lived channels rather than captured in formal documentation. Engineering discussion is used throughout as a concrete worked example, but nothing in the system is specific to it.
 
 This repository combines two layers:
 
 - `neurallog/`: the Python retrieval application, including ingestion, indexing, search, evaluation, timeline reconstruction, and a local web interface
 - `DiscordChatExporter.*`: the upstream Discord export tooling retained as the ingestion substrate for producing compatible JSON exports
 
-The present implementation should be understood as an applied retrieval system rather than a production knowledge platform. Its purpose is to support exploration of how engineering chat archives can be indexed, queried, evaluated, and iteratively improved using lightweight local infrastructure.
+The present implementation should be understood as an applied retrieval system rather than a production knowledge platform. Its purpose is to support exploration of how chat archives of any kind can be indexed, queried, evaluated, and iteratively improved using lightweight local infrastructure.
 
 ## Abstract
 
-Engineering teams generate substantial technical knowledge in conversational systems, yet much of this knowledge remains difficult to recover once it is buried in chat history. NeuralLog investigates whether Discord export archives can be restructured into a usable memory layer through message normalization, chunk-based indexing, configurable embeddings, hybrid retrieval, and query-conditioned timeline reconstruction. The current system supports local experimentation through both a command-line interface and a FastAPI-backed web application, with evaluation utilities for comparing retrieval behavior across embedding configurations.
+Communities generate substantial knowledge in conversational systems, yet much of it remains difficult to recover once it is buried in chat history. NeuralLog investigates whether Discord export archives can be restructured into a usable memory layer through message normalization, chunk-based indexing, configurable embeddings, hybrid retrieval, and query-conditioned timeline reconstruction. The current system supports local experimentation through both a command-line interface and a FastAPI-backed web application, with evaluation utilities for comparing retrieval behavior across embedding configurations.
 
 ## Research Motivation
 
-In robotics and embedded software environments, consequential technical decisions are frequently made in informal channels: sensor debugging threads, field-test observations, deployment coordination, estimator tuning discussions, and subsystem integration reviews. These artifacts are valuable, but they are rarely organized for retrospective analysis.
+Across many kinds of communities, consequential decisions are made in informal channels: debugging threads and integration reviews in an engineering team, paper discussions and experiment notes in a research group, troubleshooting exchanges in a support channel, planning and lore in a hobby or gaming server. These artifacts are valuable, but they are rarely organized for retrospective analysis. (The examples in this document are drawn from an engineering channel, simply because that is the bundled sample export.)
 
 NeuralLog is motivated by the following question:
 
-> Can engineering chat history be transformed into a practical retrieval layer for reconstructing decisions, diagnosing past failures, and recovering design context?
+> Can chat history be transformed into a practical retrieval layer for reconstructing decisions, diagnosing past problems, and recovering context?
 
 This repository explores that question with a deliberately compact architecture that can be executed locally and extended incrementally.
 
@@ -105,7 +105,7 @@ hybrid retrieval
 timeline reconstruction / evaluation / API responses
 ```
 
-The retrieval stage combines semantic similarity with lexical evidence. In practice, this hybrid ranking is important for engineering queries containing domain-specific terms such as `EKF`, `AMCL`, `localization`, or `odom drift`, where pure semantic similarity may over-generalize toward nearby concepts such as mapping or SLAM.
+The retrieval stage combines semantic similarity with lexical evidence. In practice, this hybrid ranking matters for queries containing domain-specific terms — a jargon acronym, a product name, a person's handle, an error code — where pure semantic similarity may over-generalize toward merely adjacent concepts. (For example, in an engineering channel, terms like `EKF`, `AMCL`, or `odom drift` should not collapse into nearby topics such as mapping or SLAM.)
 
 ## Installation
 
@@ -253,6 +253,22 @@ Returned summary metrics include:
 - mean recall@k
 - mean reciprocal rank
 
+#### Baseline results on the bundled sample set
+
+Running the command above (`--limit 3`) against `examples/sample-discord-export.json`
+and the 3-query labeled set in `examples/sample-evaluation.json`:
+
+| Embedding backend | mean precision@3 | mean recall@3 | mean reciprocal rank |
+| --- | --- | --- | --- |
+| `hash` (dependency-light) | 0.556 | 0.722 | 1.000 |
+
+These figures come from a deliberately tiny fixture (8 messages, 3 queries) and are
+meant as a reproducible sanity baseline, not a benchmark. The perfect reciprocal rank
+reflects that the first relevant chunk is always retrieved first on this set; precision
+and recall are bounded by the small number of labeled messages per query. Run
+`compare-backends` (below) with `sentence-transformers` or `openai` specs to reproduce
+the same metrics against learned embeddings on your own export.
+
 ### 6. Compare embedding backends
 
 ```bash
@@ -320,7 +336,7 @@ Representative output:
 }
 ```
 
-This behavior illustrates the intended retrieval pattern: chunks explicitly containing the target engineering concept are promoted above merely adjacent topics.
+This behavior illustrates the intended retrieval pattern: chunks explicitly containing the target concept are promoted above merely adjacent topics.
 
 ## API
 
@@ -387,7 +403,7 @@ NeuralLog is currently best suited for:
 - local experimentation
 - architecture validation
 - retrieval quality studies
-- engineering-memory demonstrations
+- conversational-memory demonstrations
 - iterative tuning of chunking, embeddings, and ranking behavior
 
 The `hash` backend remains useful as a portable baseline, but it should be treated as a convenience model rather than the target retrieval ceiling. For higher-quality search behavior, `sentence-transformers` is the recommended default local backend.
@@ -397,14 +413,14 @@ The `hash` backend remains useful as a portable baseline, but it should be treat
 Planned directions include:
 
 - stronger hybrid retrieval and reranking strategies
-- more rigorous benchmark datasets for engineering queries
-- multi-source ingestion from Git history, deployment logs, ROS artifacts, and experiment records
+- more rigorous benchmark datasets across domains
+- multi-source ingestion beyond Discord (other chat exports, issue trackers, notes, and logs)
 - narrative summarization and root-cause synthesis
 - knowledge graph construction across systems, teams, and decisions
 - interactive visualization for long-horizon project reconstruction
 
 ## Why This Project Exists
 
-NeuralLog begins from a simple premise: high-value engineering knowledge is frequently produced in chat, but chat systems are poor long-term memory systems. Recovering that knowledge usually requires either individual recollection or time-consuming manual searching through conversational archives.
+NeuralLog begins from a simple premise: high-value knowledge is frequently produced in chat, but chat systems are poor long-term memory systems. Recovering that knowledge usually requires either individual recollection or time-consuming manual searching through conversational archives.
 
-This project explores whether a lightweight retrieval layer can materially improve that situation. In that sense, NeuralLog is not just a software utility; it is also an applied investigation into how engineering organizations might preserve conversational knowledge as a searchable technical asset.
+This project explores whether a lightweight retrieval layer can materially improve that situation. In that sense, NeuralLog is not just a software utility; it is also an applied investigation into how any community or organization might preserve conversational knowledge as a searchable asset.

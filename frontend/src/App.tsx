@@ -151,11 +151,11 @@ export default function App() {
 
         <section className="grid gap-5 xl:grid-cols-[1.45fr_0.95fr]">
           <Card className="border border-white/10 bg-neurallog-panel/90 shadow-panel">
-            <div className="mb-3 text-xs uppercase tracking-[0.28em] text-neurallog-mint">Engineering Memory System</div>
+            <div className="mb-3 text-xs uppercase tracking-[0.28em] text-neurallog-mint">Conversational Memory System</div>
             <h1 className="font-display text-5xl text-white md:text-7xl">NeuralLog</h1>
             <p className="mt-5 max-w-3xl text-base leading-7 text-neurallog-fog md:text-lg">
-              Search Discord exports, reconstruct timelines, evaluate retrieval quality, and compare
-              embedding backends from a frontend built for engineering workflows instead of raw debug output.
+              Turn any Discord community's history into searchable memory: search exports, reconstruct
+              timelines, evaluate retrieval quality, and compare embedding backends — all in the browser.
             </p>
           </Card>
 
@@ -286,7 +286,7 @@ export default function App() {
         <footer className="mt-2 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-neurallog-fog">
           <div className="flex items-center gap-2">
             <DiscordLogo className="h-4 w-4 text-[#5865F2]" />
-            <span>NeuralLog · Engineering memory for Discord exports</span>
+            <span>NeuralLog · Conversational memory for Discord exports</span>
           </div>
           <Button
             as="a"
